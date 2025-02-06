@@ -16,6 +16,12 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Orientation="Vertical">
             <StackPanel Margin="15,10,0,0" Orientation="Vertical">
@@ -234,5 +240,16 @@
                     Text="{Binding CurrentAPIConfig.ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
+        
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="15,10,0,0" Orientation="Vertical">
+            <TextBlock Margin="2.5,0,0,5" Text="Enable Debug Logging" />
+            <ui:ToggleSwitch 
+                x:Name="DebugLoggingSwitch"
+                Width="145"
+                Height="30"
+                IsChecked="{Binding IsDebugLoggingEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
     </Grid>
+    
 </Page>

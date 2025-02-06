@@ -42,5 +42,17 @@ namespace LiveCaptionsTranslator
         {
             LoadAPISetting();
         }
+        
+        private void DebugLoggingToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            App.Settings.IsDebugLoggingEnabled = true;
+            Logger.UpdateLoggingLevel(true);
+        }
+
+        private void DebugLoggingToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            App.Settings.IsDebugLoggingEnabled = false;
+            Logger.UpdateLoggingLevel(false);
+        }
     }
 }

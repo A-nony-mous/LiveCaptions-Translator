@@ -22,6 +22,21 @@ namespace LiveCaptionsTranslator.models
         private TranslateAPIConfig? currentAPIConfig;
 
         private bool enableLogging = true;
+        
+        private bool isDebugLoggingEnabled = false;
+
+        [JsonInclude]
+        public bool IsDebugLoggingEnabled
+        {
+            get => isDebugLoggingEnabled;
+            set
+            {
+                isDebugLoggingEnabled = value;
+                OnPropertyChanged();
+                Logger.UpdateLoggingLevel(value); 
+            }
+        }
+
         public bool EnableLogging
         {
             get => enableLogging;
@@ -134,6 +149,9 @@ namespace LiveCaptionsTranslator.models
                 setting = new Setting();
                 setting.Save();
             }
+
+            Logger.UpdateLoggingLevel(setting.IsDebugLoggingEnabled);
+
             return setting;
         }
 
