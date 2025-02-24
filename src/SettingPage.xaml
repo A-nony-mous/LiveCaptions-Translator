@@ -257,5 +257,65 @@
                     Text="{Binding CurrentAPIConfig.ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
+
+        <Grid x:Name="CustomGrid" Grid.Column="2" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Custom API URL" />
+                <ui:TextBox
+                    Width="185"
+                    Height="30"
+                    Padding="10,4,10,7"
+                    FontSize="13.3"
+                    Text="{Binding CurrentAPIConfig.CustomUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="1" Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Auth Key (通常是 Authorization)" />
+                <ui:TextBox
+                    Width="185"
+                    Height="30"
+                    Padding="10,4,10,7"
+                    FontSize="13.3"
+                    Text="{Binding CurrentAPIConfig.AuthKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Translation Key" />
+                <ui:TextBox
+                    Width="185"
+                    Height="30"
+                    Padding="10,4,10,7"
+                    FontSize="13.3"
+                    Text="{Binding CurrentAPIConfig.TranslationKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Callback Key" />
+                <ui:TextBox
+                    Width="185"
+                    Height="30"
+                    Padding="10,4,10,7"
+                    FontSize="13.3"
+                    Text="{Binding CurrentAPIConfig.CallbackKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            
+            <StackPanel Grid.Row="0" Grid.Column="2" Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Target Key" />
+                <ui:TextBox
+                    Width="185"
+                    Height="30"
+                    Padding="10,4,10,7"
+                    FontSize="13.3"
+                    Text="{Binding CurrentAPIConfig.TargetKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

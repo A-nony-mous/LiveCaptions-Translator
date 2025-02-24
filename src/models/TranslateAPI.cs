@@ -12,7 +12,8 @@ namespace LiveCaptionsTranslator.models
             { "Ollama", Ollama },
             { "OpenAI", OpenAI },
             { "GoogleTranslate", GoogleTranslate },
-            { "OpenRouter", OpenRouter }
+            { "OpenRouter", OpenRouter },
+            { "Custom",  CustomTranslate },
         };
         public static Func<string, Task<string>> TranslateFunc
         {
@@ -188,6 +189,81 @@ namespace LiveCaptionsTranslator.models
                                .GetProperty("message")
                                .GetProperty("content")
                                .GetString() ?? string.Empty;
+        }
+
+        public static async Task<string> CustomTranslate(string text)
+        {
+            var config = App.Settings.CurrentAPIConfig as CustomConfig;
+            if (config == null)
+            {
+                return "[Translation Failed] Invalid configuration.";
+            }
+
+            string language = config.SupportedLanguages.TryGetValue(App.Settings.TargetLanguage, out var langValue) 
+                ? langValue 
+                : App.Settings.TargetLanguage; 
+
+            var requestData = new Dictionary<string, string>
+            {
+                { config.TranslationKey, text },
+                { config.TargetKey, language }
+            };
+
+            string jsonContent = JsonSerializer.Serialize(requestData);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add("Authorization", config.ApiKey); 
+            
+            try
+            {
+                HttpResponseMessage response = await client.PostAsync(config.ApiUrl, content);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    try
+                    {
+                        using JsonDocument doc = JsonDocument.Parse(responseString);
+                        JsonElement root = doc.RootElement;
+                    
+                        string? translatedText = GetJsonValue(root, config.CallbackKey);
+                        return translatedText ?? "[Translation Failed] No translation result.";
+                    }
+                    catch (Exception ex)
+                    {
+                        return $"[Translation Failed] Invalid response format. {ex.Message}";
+                    }
+                }
+                else
+                {
+                    return $"[Translation Failed] HTTP Error - {response.StatusCode}";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"[Translation Failed] {ex.Message}";
+            }
+
+        }
+        private static string? GetJsonValue(JsonElement root, string keyPath)
+        {
+            string[] keys = keyPath.Split('.');
+            JsonElement currentElement = root;
+
+            foreach (var key in keys)
+            {
+                if (currentElement.ValueKind == JsonValueKind.Object && currentElement.TryGetProperty(key, out JsonElement nextElement))
+                {
+                    currentElement = nextElement;
+                }
+                else
+                {
+                    return null; 
+                }
+            }
+
+            return currentElement.ValueKind == JsonValueKind.String ? currentElement.GetString() : null;
         }
     }
 
