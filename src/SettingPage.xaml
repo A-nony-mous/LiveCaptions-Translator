@@ -198,6 +198,44 @@
 
         <Grid x:Name="GoogleTranslateGrid" Grid.Column="2" />
 
+        <Grid x:Name="DeepLGrid" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="15,10,0,0"
+                Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="API Url" />
+                <ui:TextBox
+                    Width="185"
+                    Height="30"
+                    Padding="10,4,10,7"
+                    FontSize="13.3"
+                    Text="{Binding CurrentAPIConfig.ApiUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="15,10,0,0"
+                Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="API Key" />
+                <ui:TextBox
+                    Width="185"
+                    Height="30"
+                    Padding="10,4,10,7"
+                    FontSize="13.3"
+                    Text="{Binding CurrentAPIConfig.ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </Grid>
+              
+        
         <Grid
             x:Name="OpenRouterGrid"
             Grid.Column="2"

@@ -12,7 +12,8 @@ namespace LiveCaptionsTranslator.models
             { "Ollama", Ollama },
             { "OpenAI", OpenAI },
             { "GoogleTranslate", GoogleTranslate },
-            { "OpenRouter", OpenRouter }
+            { "OpenRouter", OpenRouter },
+            { "DeepL", DeepL },
         };
         public static Func<string, Task<string>> TranslateFunc
         {
@@ -188,6 +189,56 @@ namespace LiveCaptionsTranslator.models
                                .GetProperty("message")
                                .GetProperty("content")
                                .GetString() ?? string.Empty;
+        }
+        
+        public static async Task<string> DeepL(string text)
+        {
+            var config = App.Settings.CurrentAPIConfig as DeepLConfig;
+            string language = config.SupportedLanguages.TryGetValue(App.Settings.TargetLanguage, out var langValue) 
+                ? langValue 
+                : App.Settings.TargetLanguage;
+    
+            var requestData = new
+            {
+                text = new[] { text },
+                target_lang = language
+            };
+
+            string jsonContent = JsonSerializer.Serialize(requestData);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+    
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add("Authorization", $"DeepL-Auth-Key {config?.ApiKey}");
+    
+            string apiUrl = string.IsNullOrEmpty(config?.ApiUrl) ? "https://api.deepl.com/v2/translate" : config.ApiUrl;
+    
+            HttpResponseMessage response;
+            try
+            {
+                response = await client.PostAsync(apiUrl, content);
+            }
+            catch (Exception ex)
+            {
+                return $"[Translation Failed] {ex.Message}";
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseString = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(responseString);
+                // print response
+                Console.WriteLine("DeepL Response: " + responseString);
+                if (doc.RootElement.TryGetProperty("translations", out var translations) &&
+                    translations.ValueKind == JsonValueKind.Array && translations.GetArrayLength() > 0)
+                {
+                    return translations[0].GetProperty("text").GetString();
+                }
+                return "[Translation Failed] No valid feedback";
+            }
+            else
+            {
+                return $"[Translation Failed] HTTP Error - {response.StatusCode}";
+            }
         }
     }
 
