@@ -161,4 +161,76 @@ namespace LiveCaptionsTranslator.models
         [JsonIgnore]
         public override Dictionary<string, string> SupportedLanguages => SUPPORTED_LANGUAGES;
     }
+    
+    public class CustomConfig : TranslateAPIConfig
+    {
+        
+        private string _apiKey = "";
+        public string ApiKey
+        {
+            get => _apiKey;
+            set
+            {
+                _apiKey = value;
+                OnPropertyChanged("ApiKey");
+            }
+        }
+        private string _apiUrl = "";
+        public string ApiUrl
+        {
+            get => _apiUrl;
+            set
+            {
+                _apiUrl = value;
+                OnPropertyChanged("ApiUrl");
+            }
+        }
+        
+        private string _callbackKey = "";
+        public string CallbackKey
+        {
+            get => _callbackKey;
+            set
+            {
+                _callbackKey = value;
+                OnPropertyChanged("CallbackKey");
+            }
+        }
+        private string _translationKey = "";
+        public string TranslationKey
+        {
+            get => _translationKey;
+            set
+            {
+                _translationKey = value;
+                OnPropertyChanged("TranslationKey");
+            }
+        }
+        private string _targetKey = "";
+        public string TargetKey
+        {
+            get => _targetKey;
+            set
+            {
+                _targetKey = value;
+                OnPropertyChanged("targetKey");
+            }
+        }
+        
+        private static readonly Dictionary<string, string> SUPPORTED_LANGUAGES = new()
+        {
+            { "zh-CN","zh-CN" },
+            { "zh-TW", "zh-TW" },
+            { "en-US", "en-US" },
+            { "en-GB", "en-GB" },
+            { "ja-JP", "ja-JP" },
+            { "ko-KR", "ko-KR" },
+            { "fr-FR", "fr-FR" },
+        };
+        
+        [JsonIgnore]
+        public override Dictionary<string, string> SupportedLanguages => SUPPORTED_LANGUAGES;
+        
+        
+    }
 }
