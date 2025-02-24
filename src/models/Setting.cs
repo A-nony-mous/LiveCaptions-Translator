@@ -152,6 +152,7 @@ namespace LiveCaptionsTranslator.models
                 { "OpenAI", new OpenAIConfig() },
                 { "GoogleTranslate", new GoogleTranslateConfig() },
                 { "GTranslateNew", new GTranslateNewConfig() },
+                { "DeepL", new DeepLConfig() },
                 { "OpenRouter", new OpenRouterConfig() },
             };
         }

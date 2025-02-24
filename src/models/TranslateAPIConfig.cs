@@ -181,4 +181,42 @@ namespace LiveCaptionsTranslator.models
         [JsonIgnore]
         public override Dictionary<string, string> SupportedLanguages => SUPPORTED_LANGUAGES;
     }
+    
+    public class DeepLConfig : TranslateAPIConfig
+    {
+        private string _apiKey = "";
+
+        private string _apiUrl = "";
+        public string ApiKey
+        {
+            get => _apiKey;
+            set
+            {
+                _apiKey = value;
+                OnPropertyChanged("ApiKey");
+            }
+        }
+        public string ApiUrl
+        {
+            get => _apiUrl;
+            set
+            {
+                _apiUrl = value;
+                OnPropertyChanged("ApiUrl");
+            }
+        }
+
+        private static readonly Dictionary<string, string> SUPPORTED_LANGUAGES = new()
+        {
+            { "zh-CN", "zh-CN" },
+            { "zh-TW", "zh-TW" },
+            { "en-US", "en-US" },
+            { "en-GB", "en-GB" },
+            { "ja-JP", "ja-JP" },
+            { "ko-KR", "ko-KR" },
+            { "fr-FR", "fr-FR" },
+        };
+
+        [JsonIgnore] public override Dictionary<string, string> SupportedLanguages => SUPPORTED_LANGUAGES;
+    }
 }
