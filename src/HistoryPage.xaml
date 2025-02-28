@@ -30,25 +30,23 @@
                 <ui:Button
                     x:Name="Previous"
                     Appearance="Transparent"
-                    Click="PageDown"
-                    Icon="{ui:SymbolIcon chevronLeft12,
-                                         Filled=False}"
+                    Command="{Binding PageDownCommand}"
+                    Icon="{ui:SymbolIcon chevronLeft12, Filled=False}"
                     MouseOverBackground="#07000000"
-                    ToolTip="Previous " />
+                    ToolTip="Previous" />
 
                 <TextBlock
                     x:Name="PageNamber"
                     Margin="10,0,10,0"
                     VerticalAlignment="Center"
                     FontSize="15"
-                    Text="1" />
+                    Text="{Binding PageNumberText}" />
 
                 <ui:Button
                     x:Name="Next"
                     Appearance="Transparent"
-                    Click="PageUp"
-                    Icon="{ui:SymbolIcon chevronRight12,
-                                         Filled=False}"
+                    Command="{Binding PageUpCommand}"
+                    Icon="{ui:SymbolIcon chevronRight12, Filled=False}"
                     MouseOverBackground="#07000000"
                     ToolTip="Next Page" />
 
@@ -58,7 +56,8 @@
                     Margin="5,0,0,0"
                     Padding="10,4,10,7"
                     VerticalAlignment="Stretch"
-                    SelectionChanged="maxRow_SelectionChanged">
+                    SelectedValuePath="Tag"
+                    SelectedValue="{Binding SelectedMaxRowString, Mode=TwoWay}">
                     <ComboBoxItem Content="20/page" Tag="20" />
                     <ComboBoxItem Content="30/page" Tag="30" />
                     <ComboBoxItem Content="50/page" Tag="50" />
@@ -77,9 +76,8 @@
                     Margin="25,0,0,0"
                     HorizontalAlignment="Right"
                     Appearance="Transparent"
-                    Click="ExportHistory"
-                    Icon="{ui:SymbolIcon ArrowDown12,
-                                         Filled=False}"
+                    Command="{Binding ExportHistoryCommand}"
+                    Icon="{ui:SymbolIcon ArrowDown12, Filled=False}"
                     MouseOverBackground="#07000000"
                     ToolTip="Export"
                 />
@@ -88,9 +86,8 @@
                     Margin="15,0,0,0"
                     HorizontalAlignment="Right"
                     Appearance="Transparent"
-                    Click="DeleteHistory"
-                    Icon="{ui:SymbolIcon Delete12,
-                                         Filled=False}"
+                    Command="{Binding DeleteHistoryCommand}"
+                    Icon="{ui:SymbolIcon Delete12, Filled=False}"
                     MouseOverBackground="#07000000"
                     ToolTip="Delete All" />
 
@@ -99,9 +96,8 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Right"
                     Appearance="Transparent"
-                    Click="ReloadLogs"
-                    Icon="{ui:SymbolIcon ArrowClockwise12,
-                                         Filled=False}"
+                    Command="{Binding ReloadLogsCommand}"
+                    Icon="{ui:SymbolIcon ArrowClockwise12, Filled=False}"
                     MouseOverBackground="#07000000"
                     ToolTip="Refresh" />
             </StackPanel>
@@ -115,7 +111,8 @@
             AutoGenerateColumns="False"
             BorderThickness="0,0,0,0"
             GridLinesVisibility="Horizontal"
-            IsReadOnly="True">
+            IsReadOnly="True"
+            ItemsSource="{Binding HistoryEntries}">
             <DataGrid.VerticalGridLinesBrush>
                 <LinearGradientBrush MappingMode="Absolute" EndPoint="0,3">
                     <GradientStop Offset="0.33" Color="#18FFFFFF" />
