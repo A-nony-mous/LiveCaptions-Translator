@@ -1,29 +1,30 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Windows.Automation;
 
 namespace LiveCaptionsTranslator.utils
 {
-    public static class LiveCaptionsHandler
+    public static class LiveCaptionsHandler : IDisposable
     {
         public static readonly string PROCESS_NAME = "LiveCaptions";
+        private static Process? liveCaptionsProcess = null;
+        private static AutomationElement? liveCaptionsWindow = null;
 
         public static AutomationElement LaunchLiveCaptions()
         {
             // Init
             KillAllProcessesByPName(PROCESS_NAME);
-            var process = Process.Start(PROCESS_NAME);
+            liveCaptionsProcess = Process.Start(PROCESS_NAME);
 
             // Search for window
-            AutomationElement? window = null;
             for (int attemptCount = 0;
-                 window == null || window.Current.ClassName.CompareTo("LiveCaptionsDesktopWindow") != 0;
+                 liveCaptionsWindow == null || liveCaptionsWindow.Current.ClassName.CompareTo("LiveCaptionsDesktopWindow") != 0;
                  attemptCount++)
             {
-                window = FindWindowByPId(process.Id);
+                liveCaptionsWindow = FindWindowByPId(liveCaptionsProcess.Id);
                 if (attemptCount > 10000)
                     throw new Exception("Failed to launch!");
             }
-            return window;
+            return liveCaptionsWindow;
         }
 
         public static void KillLiveCaptions(AutomationElement window)
@@ -150,6 +151,22 @@ namespace LiveCaptionsTranslator.utils
                 }
             }
             return false;
+        }
+
+        public void Dispose()
+        {
+            if (liveCaptionsWindow != null)
+            {
+                RestoreLiveCaptions(liveCaptionsWindow);
+                KillLiveCaptions(liveCaptionsWindow);
+                liveCaptionsWindow = null;
+            }
+
+            if (liveCaptionsProcess != null)
+            {
+                liveCaptionsProcess.Dispose();
+                liveCaptionsProcess = null;
+            }
         }
     }
 }

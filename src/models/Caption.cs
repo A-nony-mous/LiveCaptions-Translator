@@ -3,12 +3,13 @@ using System.Text;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 using LiveCaptionsTranslator.utils;
 
 namespace LiveCaptionsTranslator.models
 {
-    public class Caption : INotifyPropertyChanged
+    public class Caption : INotifyPropertyChanged, IDisposable
     {
         private static Caption? instance = null;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -44,11 +45,17 @@ namespace LiveCaptionsTranslator.models
             }
         }
 
-        private Caption() { }
+        private CancellationTokenSource? cancellationTokenSource;
+        private bool disposed = false;
+
+        private Caption() 
+        {
+            cancellationTokenSource = new CancellationTokenSource();
+        }
 
         public static Caption GetInstance()
         {
-            if (instance != null)
+            if (instance != null && !instance.disposed)
                 return instance;
             instance = new Caption();
             return instance;
@@ -59,12 +66,12 @@ namespace LiveCaptionsTranslator.models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
-        public void Sync()
+        public void Sync(CancellationToken token)
         {
             int idleCount = 0;
             int syncCount = 0;
 
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 if (App.Window == null)
                 {
@@ -148,9 +155,9 @@ namespace LiveCaptionsTranslator.models
             }
         }
 
-        public async Task Translate()
+        public async Task Translate(CancellationToken token)
         {
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 if (App.Window == null)
                 {
@@ -238,6 +245,16 @@ namespace LiveCaptionsTranslator.models
                     splits[i] += isCJ && !isKorean ? "——" : "—";
             }
             return string.Join("", splits);
+        }
+
+        public void Dispose()
+        {
+            if (disposed)
+                return;
+
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource?.Dispose();
+            disposed = true;
         }
     }
 }
