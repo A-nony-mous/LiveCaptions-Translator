@@ -3,7 +3,7 @@ using System.Windows.Automation;
 
 namespace LiveCaptionsTranslator.utils
 {
-    public static class LiveCaptionsHandler : IDisposable
+    public static class LiveCaptionsHandler
     {
         public static readonly string PROCESS_NAME = "LiveCaptions";
         private static Process? liveCaptionsProcess = null;
@@ -151,22 +151,6 @@ namespace LiveCaptionsTranslator.utils
                 }
             }
             return false;
-        }
-
-        public void Dispose()
-        {
-            if (liveCaptionsWindow != null)
-            {
-                RestoreLiveCaptions(liveCaptionsWindow);
-                KillLiveCaptions(liveCaptionsWindow);
-                liveCaptionsWindow = null;
-            }
-
-            if (liveCaptionsProcess != null)
-            {
-                liveCaptionsProcess.Dispose();
-                liveCaptionsProcess = null;
-            }
         }
     }
 }
