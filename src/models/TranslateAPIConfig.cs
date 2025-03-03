@@ -121,7 +121,7 @@ namespace LiveCaptionsTranslator.models
             public int prompt_cache_hit_tokens { get; set; }
             public int prompt_cache_miss_tokens { get; set; }
         }
-        public new class Response
+        public class Response
         {
             public string id { get; set; }
             public string @object { get; set; }

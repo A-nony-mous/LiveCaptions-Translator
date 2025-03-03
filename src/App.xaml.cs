@@ -1,4 +1,7 @@
-﻿using System.Windows;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Automation;
 
 using LiveCaptionsTranslator.models;
@@ -6,11 +9,12 @@ using LiveCaptionsTranslator.utils;
 
 namespace LiveCaptionsTranslator
 {
-    public partial class App : Application
+    public partial class App : Application, IDisposable
     {
         private static AutomationElement? window = null;
         private static Caption? captions = null;
         private static Setting? settings = null;
+        private static CancellationTokenSource? cancellationTokenSource = null;
 
         public static AutomationElement? Window
         {
@@ -37,16 +41,35 @@ namespace LiveCaptionsTranslator
             captions = Caption.GetInstance();
             settings = Setting.Load();
 
-            Task.Run(() => Captions?.Sync());
-            Task.Run(() => Captions?.Translate());
+            cancellationTokenSource = new CancellationTokenSource();
+            var token = cancellationTokenSource.Token;
+
+            Task.Run(() => Captions?.Sync(token), token);
+            Task.Run(() => Captions?.Translate(token), token);
         }
 
         static void OnProcessExit(object sender, EventArgs e)
+        {
+            Dispose();
+        }
+
+        public static void Dispose()
         {
             if (window != null)
             {
                 LiveCaptionsHandler.RestoreLiveCaptions(window);
                 LiveCaptionsHandler.KillLiveCaptions(window);
+            }
+
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+            }
+
+            if (captions != null)
+            {
+                captions.Dispose();
             }
         }
     }
