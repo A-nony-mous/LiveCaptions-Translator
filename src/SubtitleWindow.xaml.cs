@@ -37,26 +37,60 @@ namespace LiveCaptionsTranslator
         {
             InitializeComponent();
             DataContext = App.Captions;
-
+            
+            ApplyTextRenderingSettings();
+            OptimizeShadowSettings();
+            
             Loaded += (s, e) => App.Captions.PropertyChanged += TranslatedChanged;
             Unloaded += (s, e) => App.Captions.PropertyChanged -= TranslatedChanged;
 
+            this.UseLayoutRounding = true;
+            
             this.OriginalCaption.FontWeight = (App.Settings.OverlayFontBold == 3 ? FontWeights.Bold : FontWeights.Regular);
             this.TranslatedCaption.FontWeight = (App.Settings.OverlayFontBold >= 2 ? FontWeights.Bold : FontWeights.Regular);
             this.OriginalCaptionShadow.Opacity = (App.Settings.OverlayFontShadow == 3 ? 1.0 : 0.0);
             this.TranslatedCaptionShadow.Opacity = (App.Settings.OverlayFontShadow >= 2 ? 1.0 : 0.0);
-
+            // OriginalCaption.FontFamily = new FontFamily("Microsoft YaHei");
+            // TranslatedCaption.FontFamily = new FontFamily("Microsoft YaHei");
             this.TranslatedCaption.Foreground = ColorList[App.Settings.OverlayFontColor];
             this.OriginalCaption.Foreground = ColorList[App.Settings.OverlayFontColor];
             this.BorderBackground.Background = ColorList[App.Settings.OverlayBackgroundColor];
             this.BorderBackground.Opacity = App.Settings.OverlayOpacity;
         }
 
+        private void ApplyTextRenderingSettings()
+        {
+            // Apply to both text blocks
+            TextOptions.SetTextFormattingMode(OriginalCaption, TextFormattingMode.Display);
+            TextOptions.SetTextRenderingMode(OriginalCaption, TextRenderingMode.ClearType);
+    
+            TextOptions.SetTextFormattingMode(TranslatedCaption, TextFormattingMode.Display);
+            TextOptions.SetTextRenderingMode(TranslatedCaption, TextRenderingMode.ClearType);
+        }
+        
+        private void OptimizeShadowSettings()
+        {
+            // Reduce blur radius for sharper text edges
+            OriginalCaptionShadow.BlurRadius = 2;
+            TranslatedCaptionShadow.BlurRadius = 2;
+    
+            // Add a slight offset for better visibility
+            OriginalCaptionShadow.ShadowDepth = 1;
+            TranslatedCaptionShadow.ShadowDepth = 1;
+        }
+        
+        private void SnapToPixel()
+        {
+            this.Left = Math.Round(this.Left);
+            this.Top = Math.Round(this.Top);
+        }
+        
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 this.DragMove();
+                this.SnapToPixel();
             }
         }
 
