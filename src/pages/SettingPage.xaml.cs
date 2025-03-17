@@ -136,26 +136,16 @@ namespace LiveCaptionsTranslator
             }
             targetLangBox.SelectedItem = targetLang;
 
-            // Hide all API-specific settings grids
-            HideAllAPISettings();
-
-            // Show the current API settings grid
-            string apiName = Translator.Setting.ApiName;
-            UIElement settingGrid = FindName($"{apiName}Grid") as UIElement ?? FindName("NoSettingGrid") as UIElement;
-            
-            if (settingGrid != null)
-            {
-                settingGrid.Visibility = Visibility.Visible;
-            }
+            // Show all API settings
+            ShowAllAPISettings();
         }
 
-        private void HideAllAPISettings()
+        private void ShowAllAPISettings()
         {
-            // Hide all API-specific settings grids
-            if (OpenAIGrid != null) OpenAIGrid.Visibility = Visibility.Collapsed;
-            if (OllamaGrid != null) OllamaGrid.Visibility = Visibility.Collapsed;
-            if (DeepLGrid != null) DeepLGrid.Visibility = Visibility.Collapsed;
-            if (OpenRouterGrid != null) OpenRouterGrid.Visibility = Visibility.Collapsed;
+            if (OpenAIGrid != null) OpenAIGrid.Visibility = Visibility.Visible;
+            if (OllamaGrid != null) OllamaGrid.Visibility = Visibility.Visible;
+            if (DeepLGrid != null) DeepLGrid.Visibility = Visibility.Visible;
+            if (OpenRouterGrid != null) OpenRouterGrid.Visibility = Visibility.Visible;
             if (NoSettingGrid != null) NoSettingGrid.Visibility = Visibility.Collapsed;
         }
     }
