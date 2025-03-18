@@ -182,6 +182,7 @@ namespace LiveCaptionsTranslator.models
 
         public static Setting Load(string jsonPath)
         {
+            bool updated = false;
             Setting setting;
             if (File.Exists(jsonPath))
             {
@@ -198,8 +199,71 @@ namespace LiveCaptionsTranslator.models
             else
             {
                 setting = new Setting();
-                setting.Save();
+                updated = true;
             }
+
+            // Create a default instance for reference defaults.
+            var defaultSetting = new Setting();
+
+            // Check string properties
+            if (string.IsNullOrEmpty(setting.ApiName))
+            {
+                setting.ApiName = defaultSetting.ApiName;
+                updated = true;
+            }
+            if (string.IsNullOrEmpty(setting.TargetLanguage))
+            {
+                setting.TargetLanguage = defaultSetting.TargetLanguage;
+                updated = true;
+            }
+            if (string.IsNullOrEmpty(setting.Prompt))
+            {
+                setting.Prompt = defaultSetting.Prompt;
+                updated = true;
+            }
+
+            // Check dictionary properties
+            if (setting.WindowBounds == null || setting.WindowBounds.Count == 0)
+            {
+                setting.WindowBounds = defaultSetting.WindowBounds;
+                updated = true;
+            }
+
+            // Merge missing keys in Configs
+            if (setting.Configs == null)
+            {
+                setting.Configs = defaultSetting.Configs;
+                updated = true;
+            }
+            else
+            {
+                foreach (var kvp in defaultSetting.Configs)
+                {
+                    if (!setting.Configs.ContainsKey(kvp.Key))
+                    {
+                        setting.Configs[kvp.Key] = kvp.Value;
+                        updated = true;
+                    }
+                }
+            }
+
+            // Check nested objects
+            if (setting.MainWindow == null)
+            {
+                setting.MainWindow = defaultSetting.MainWindow;
+                updated = true;
+            }
+            if (setting.OverlayWindow == null)
+            {
+                setting.OverlayWindow = defaultSetting.OverlayWindow;
+                updated = true;
+            }
+
+            if (updated)
+            {
+                setting.Save(jsonPath);
+            }
+
             return setting;
         }
 
