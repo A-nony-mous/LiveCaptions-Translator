@@ -254,4 +254,46 @@ namespace LiveCaptionsTranslator.models
         }
     }
 
+
+    public class MTranServerConfig : TranslateAPIConfig
+    {
+        [JsonIgnore]
+        public override Dictionary<string, string> SupportedLanguages { get; } = new()
+        {
+            { "zh-CN", "zh" },
+            { "zh-TW", "zh" },
+            { "en-US", "en" },
+            { "en-GB", "en" },
+            { "ja-JP", "ja" },
+            { "ko-KR", "ko" },
+            { "fr-FR", "fr" },
+        };
+
+        private string apiKey = "";
+        private string apiUrl = "";
+
+        public string ApiKey
+        {
+            get => apiKey;
+            set
+            {
+                apiKey = value;
+                OnPropertyChanged("ApiKey");
+            }
+        }
+        public string ApiUrl
+        {
+            get => apiUrl;
+            set
+            {
+                apiUrl = value;
+                OnPropertyChanged("ApiUrl");
+            }
+        }
+
+        public class Response
+        {
+            public string result { get; set; }
+        }
+    }
 }
