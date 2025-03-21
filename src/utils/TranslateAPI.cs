@@ -231,7 +231,7 @@ namespace LiveCaptionsTranslator.utils
             else
                 return $"[Translation Failed] HTTP Error - {response.StatusCode}";
         }
-        
+
         public static async Task<string> OpenRouter(string text, CancellationToken token = default)
         {
             var config = Translator.Setting.CurrentAPIConfig as OpenRouterConfig;
@@ -289,12 +289,12 @@ namespace LiveCaptionsTranslator.utils
             else
                 return $"[Translation Failed] HTTP Error - {response.StatusCode}";
         }
-        
+
         public static async Task<string> DeepL(string text, CancellationToken token = default)
         {
             var config = Translator.Setting.CurrentAPIConfig as DeepLConfig;
-            string language = config.SupportedLanguages.TryGetValue(Translator.Setting.TargetLanguage, out var langValue) 
-                ? langValue 
+            string language = config.SupportedLanguages.TryGetValue(Translator.Setting.TargetLanguage, out var langValue)
+                ? langValue
                 : Translator.Setting.TargetLanguage;
             string apiUrl = TextUtil.NormalizeUrl(config.ApiUrl);
 
@@ -330,7 +330,7 @@ namespace LiveCaptionsTranslator.utils
             {
                 string responseString = await response.Content.ReadAsStringAsync();
                 using var doc = JsonDocument.Parse(responseString);
-        
+
                 if (doc.RootElement.TryGetProperty("translations", out var translations) &&
                     translations.ValueKind == JsonValueKind.Array && translations.GetArrayLength() > 0)
                 {
@@ -341,6 +341,7 @@ namespace LiveCaptionsTranslator.utils
             else
                 return $"[Translation Failed] HTTP Error - {response.StatusCode}";
         }
+
 
         public static async Task<string> Youdao(string text, CancellationToken token = default)
         {
@@ -397,20 +398,21 @@ namespace LiveCaptionsTranslator.utils
                 return $"[Translation Failed] HTTP Error - {response.StatusCode}";
             }
         }
-        
+
         public static async Task<string> MTranServer(string text, CancellationToken token = default)
         {
             var config = Translator.Setting.CurrentAPIConfig as MTranServerConfig;
-            string language = config.SupportedLanguages.TryGetValue(Translator.Setting.TargetLanguage, out var langValue) 
-                ? langValue 
+            string targetLanguage = config.SupportedLanguages.TryGetValue(Translator.Setting.TargetLanguage, out var langValue)
+                ? langValue
                 : Translator.Setting.TargetLanguage;
+            string sourceLanguage = config.SourceLanguage;
             string apiUrl = TextUtil.NormalizeUrl(config.ApiUrl);
 
             var requestData = new
             {
                 text = text,
-                to = language,
-                from = "en"
+                to = targetLanguage,
+                from = sourceLanguage
             };
 
             string jsonContent = JsonSerializer.Serialize(requestData);
@@ -444,7 +446,7 @@ namespace LiveCaptionsTranslator.utils
             else
                 return $"[Translation Failed] HTTP Error - {response.StatusCode}";
         }
-    }         
+    }
 
     public class ConfigDictConverter : JsonConverter<Dictionary<string, TranslateAPIConfig>>
     {

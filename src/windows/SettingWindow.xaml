@@ -505,6 +505,7 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -512,7 +513,26 @@
 
                                     <StackPanel
                                         Grid.Row="0"
-                                        Margin="15,0,0,0"
+                                        Margin="15,10,0,0"
+                                        Orientation="Vertical">
+                                        <ui:TextBlock Margin="2.5,0,0,5" Text="Source Language" />
+                                        <ComboBox
+                                            Width="200"
+                                            Height="30"
+                                            Padding="10,4,10,7"
+                                            FontSize="13.3"
+                                            IsEditable="True"
+                                            Text="{Binding Configs[MTranServer].SourceLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <ComboBoxItem Content="en" />
+                                            <ComboBoxItem Content="ja" />
+                                            <ComboBoxItem Content="fr" />
+                                            <ComboBoxItem Content="ko" />
+                                            <ComboBoxItem Content="de" />
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        Margin="15,10,0,0"
                                         Orientation="Vertical">
                                         <ui:TextBlock Margin="2.5,0,0,5" Text="API Url" />
                                         <ui:TextBox
@@ -523,7 +543,7 @@
                                             Text="{Binding Configs[MTranServer].ApiUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     </StackPanel>
                                     <StackPanel
-                                        Grid.Row="1"
+                                        Grid.Row="2"
                                         Margin="15,10,0,0"
                                         Orientation="Vertical">
                                         <ui:TextBlock Margin="2.5,0,0,5" Text="API Key" />

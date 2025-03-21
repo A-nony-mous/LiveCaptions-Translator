@@ -270,7 +270,8 @@ namespace LiveCaptionsTranslator.models
         };
 
         private string apiKey = "";
-        private string apiUrl = "";
+        private string apiUrl = "http://localhost:8989/translate";
+        private string sourceLanguage = "en";
 
         public string ApiKey
         {
@@ -288,6 +289,16 @@ namespace LiveCaptionsTranslator.models
             {
                 apiUrl = value;
                 OnPropertyChanged("ApiUrl");
+            }
+        }
+
+        public string SourceLanguage 
+        {
+            get => sourceLanguage;
+            set
+            {
+                sourceLanguage = value;
+                OnPropertyChanged("SourceLanguage");
             }
         }
 
