@@ -256,6 +256,28 @@
             </StackPanel>
         </StackPanel>
 
+        <StackPanel Grid.Column="4" Orientation="Vertical">
+            <StackPanel Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Text Direction" />
+                <CheckBox Content="Enable Right-to-Left (RTL)" IsChecked="{Binding IsRTLEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <StackPanel Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Font Size" />
+                <Slider Width="120" Minimum="10" Maximum="50" Value="{Binding FontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <StackPanel Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Font Color" />
+                <ComboBox SelectedItem="{Binding FontColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem Content="Black" />
+                    <ComboBoxItem Content="White" />
+                    <ComboBoxItem Content="Red" />
+                    <ComboBoxItem Content="Blue" />
+                    <ComboBoxItem Content="Green" />
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
 
     </Grid>
 </Page>

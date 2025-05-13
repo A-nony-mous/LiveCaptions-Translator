@@ -120,5 +120,21 @@
             x:Name="DialogHostContainer"
             MinHeight="167"
             Visibility="Collapsed" />
+        <StackPanel Orientation="Vertical" Margin="10">
+            <TextBlock Text="Text Direction" Margin="0,5" />
+            <CheckBox Content="Enable Right-to-Left (RTL)" IsChecked="{Binding IsRTLEnabled, Mode=TwoWay}" />
+
+            <TextBlock Text="Font Size" Margin="0,5" />
+            <Slider Minimum="10" Maximum="50" Value="{Binding FontSize, Mode=TwoWay}" Width="150" />
+
+            <TextBlock Text="Font Color" Margin="0,5" />
+            <ComboBox SelectedItem="{Binding FontColor, Mode=TwoWay}" Width="150">
+                <ComboBoxItem Content="Black" />
+                <ComboBoxItem Content="White" />
+                <ComboBoxItem Content="Red" />
+                <ComboBoxItem Content="Blue" />
+                <ComboBoxItem Content="Green" />
+            </ComboBox>
+        </StackPanel>
     </Grid>
 </ui:FluentWindow>

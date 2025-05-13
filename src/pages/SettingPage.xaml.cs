@@ -2,13 +2,55 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using Wpf.Ui.Appearance;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 using LiveCaptionsTranslator.utils;
 
 namespace LiveCaptionsTranslator
 {
-    public partial class SettingPage : Page
+    public partial class SettingPage : Page, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private bool _isRTLEnabled;
+        public bool IsRTLEnabled
+        {
+            get => _isRTLEnabled;
+            set
+            {
+                _isRTLEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _fontSize = 14;
+        public double FontSize
+        {
+            get => _fontSize;
+            set
+            {
+                _fontSize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _fontColor = "Black";
+        public string FontColor
+        {
+            get => _fontColor;
+            set
+            {
+                _fontColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private static SettingWindow? SettingWindow;
         
         public SettingPage()
